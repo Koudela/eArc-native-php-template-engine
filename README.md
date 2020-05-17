@@ -318,5 +318,9 @@ Even arguments can be passed to the templates constructors.
 
 ## Releases
 
+### Release 0.1
+
+- added `TemplateInterface` and `TemplateTrait`
+
 ### Release 0.0
 - initial release

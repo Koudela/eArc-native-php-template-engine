@@ -11,20 +11,17 @@
 
 namespace eArc\NativePHPTemplateEngine;
 
-class IteratorTemplateModel extends AbstractTemplateModel
+trait TemplateTrait
 {
-    /** @var iterable|TemplateInterface[] */
-    protected $iterable = [];
-
-    public function __construct(iterable $iterable)
+    public function __toString(): string
     {
-        $this->iterable = $iterable;
+        ob_start();
+        $this->template();
+        $markup = ob_get_contents();
+        ob_end_clean();
+
+        return $markup;
     }
 
-    protected function template(): void
-    {
-        foreach ($this->iterable as $template) {
-            echo $template;
-        }
-    }
+    abstract protected function template(): void;
 }
