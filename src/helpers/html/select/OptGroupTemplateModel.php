@@ -15,24 +15,24 @@ use eArc\NativePHPTemplateEngine\IteratorTemplateModel;
 
 class OptGroupTemplateModel extends IteratorTemplateModel
 {
-    /** @var string */
+    /** @var callable|string */
     protected $optionsGetter;
-    /** @var string */
+    /** @var callable|string */
     protected $labelGetter;
-    /** @var string|null */
+    /** @var callable|string|null */
     protected $disabledGetter;
-    /** @var string */
+    /** @var callable|string */
     protected $optionContentGetter;
-    /** @var string|null */
+    /** @var callable|string|null */
     protected $optionValueGetter;
-    /** @var string|null */
+    /** @var callable|string|null */
     protected $optionSelectedGetter;
-    /** @var string|null */
+    /** @var callable|string|null */
     protected $optionDisabledGetter;
     /** @var FirstOption */
     protected $firstOption;
 
-    public function __construct(iterable $iterable, string $optionsGetter, string $labelGetter, ?string $disabledGetter, string $optionContentGetter, ?string $optionValueGetter = null, ?string $optionSelectedGetter = null, ?string $optionDisabledGetter = null, ?FirstOption $firstOption = null)
+    public function __construct(iterable $iterable, $optionsGetter, $labelGetter, $disabledGetter, $optionContentGetter, $optionValueGetter = null, $optionSelectedGetter = null, $optionDisabledGetter = null, ?FirstOption $firstOption = null)
     {
         $this->optionsGetter = $optionsGetter;
         $this->labelGetter = $labelGetter;
@@ -51,15 +51,44 @@ class OptGroupTemplateModel extends IteratorTemplateModel
         echo $this->firstOption;
 
         foreach ($this->iterable as $optGroup) {
-            $optionsCallable = [$optGroup, $this->optionsGetter];
-            $labelCallable = [$optGroup, $this->labelGetter];
-            $disabledCallable = [$optGroup, $this->disabledGetter];
-
-            echo '<optgroup label="'.call_user_func($labelCallable).'"'.
-                        (is_callable($disabledCallable) && call_user_func($disabledCallable) ? ' disabled="disabled"' : '').
+            echo '<optgroup label="'.$this->getLabel($optGroup).'"'.
+                        ($this->isDisabled($optGroup) ? ' disabled="disabled"' : '').
                 '>';
-            echo new OptionTemplateModel(call_user_func($optionsCallable), $this->optionContentGetter, $this->optionValueGetter, $this->optionSelectedGetter, $this->optionDisabledGetter);
+            echo new OptionTemplateModel($this->getOptions($optGroup), $this->optionContentGetter, $this->optionValueGetter, $this->optionSelectedGetter, $this->optionDisabledGetter);
             echo '</optgroup>';
         }
+    }
+
+    protected function getLabel($optGroup): string
+    {
+        if (is_callable($this->labelGetter)) {
+            return call_user_func($this->labelGetter, $optGroup);
+        }
+
+        return call_user_func([$optGroup, $this->labelGetter]);
+    }
+
+    protected function isDisabled($optGroup): bool
+    {
+        if (null === $this->disabledGetter) {
+            return false;
+        }
+
+        if (is_callable($this->disabledGetter)) {
+            return call_user_func($this->disabledGetter, $optGroup);
+        }
+
+        $callable = [$optGroup, $this->disabledGetter];
+
+        return is_callable($callable) && call_user_func($callable);
+    }
+
+    protected function getOptions($optGroup): iterable
+    {
+        if (is_callable($this->optionsGetter)) {
+            return call_user_func($this->optionsGetter, $optGroup);
+        }
+
+        return call_user_func([$optGroup, $this->optionsGetter]);
     }
 }

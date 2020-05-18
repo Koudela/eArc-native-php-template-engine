@@ -15,18 +15,18 @@ use eArc\NativePHPTemplateEngine\IteratorTemplateModel;
 
 class OptionTemplateModel extends IteratorTemplateModel
 {
-    /** @var string */
+    /** @var callable|string */
     protected $contentGetter;
-    /** @var string|null */
+    /** @var callable|string|null */
     protected $valueGetter;
-    /** @var string|null */
+    /** @var callable|string|null */
     protected $selectedGetter;
-    /** @var string|null */
+    /** @var callable|string|null */
     protected $disabledGetter;
     /** @var FirstOption */
     protected $firstOption;
 
-    public function __construct(iterable $iterable, string $contentGetter, ?string $valueGetter = null, ?string $selectedGetter = null, ?string $disabledGetter = null, ?FirstOption $firstOption = null)
+    public function __construct(iterable $iterable, $contentGetter, $valueGetter = null, $selectedGetter = null, $disabledGetter = null, ?FirstOption $firstOption = null)
     {
         $this->contentGetter = $contentGetter;
         $this->valueGetter = $valueGetter;
@@ -42,16 +42,61 @@ class OptionTemplateModel extends IteratorTemplateModel
         echo $this->firstOption;
 
         foreach ($this->iterable as $option) {
-            $contentCallable = [$option, $this->contentGetter];
-            $valueCallable = [$option, $this->valueGetter];
-            $selectedCallable = [$option, $this->selectedGetter];
-            $disabledCallable = [$option, $this->disabledGetter];
-
             echo '<option'.
-                    (is_callable($valueCallable) ? ' value="'.call_user_func($valueCallable).'"' : '').
-                    (is_callable($selectedCallable) && call_user_func($selectedCallable) ? ' selected="selected"' : '').
-                    (is_callable($disabledCallable) && call_user_func($disabledCallable) ? ' disabled="disabled"' : '').
-                '>'.call_user_func($contentCallable).'</option>';
+                    $this->getValue($option).
+                    ($this->isSelected($option) ? ' selected="selected"' : '').
+                    ($this->isDisabled($option) ? ' disabled="disabled"' : '').
+                '>'.$this->getContent($option).'</option>';
         }
+    }
+
+    protected function getContent($option): string
+    {
+        if (is_callable($this->contentGetter)) {
+            return call_user_func($this->contentGetter, $option);
+        }
+
+        return call_user_func([$option, $this->contentGetter]);
+    }
+
+    protected function getValue($option): string
+    {
+        if (null === $this->valueGetter) {
+            return '';
+        }
+
+        $value = is_callable($this->valueGetter) ? call_user_func($this->valueGetter) : call_user_func([$option, $this->valueGetter]);
+
+        return ' value="'.$value.'"';
+    }
+
+    protected function isSelected($option): bool
+    {
+        if (null === $this->selectedGetter) {
+            return false;
+        }
+
+        if (is_callable($this->selectedGetter)) {
+            return call_user_func($this->selectedGetter, $option);
+        }
+
+        $callable = [$option, $this->selectedGetter];
+
+        return is_callable($callable) && call_user_func($callable);
+    }
+
+    protected function isDisabled($option): bool
+    {
+        if (null === $this->disabledGetter) {
+            return false;
+        }
+
+        if (is_callable($this->disabledGetter)) {
+            return call_user_func($this->disabledGetter, $option);
+        }
+
+        $callable = [$option, $this->disabledGetter];
+
+        return is_callable($callable) && call_user_func($callable);
     }
 }

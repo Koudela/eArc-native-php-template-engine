@@ -318,6 +318,10 @@ Even arguments can be passed to the templates constructors.
 
 ## Releases
 
+### Release 0.2
+
+- added `callable` type to arguments for `OptionTemplateModel` and `OptGroupTemplateModel`
+
 ### Release 0.1
 
 - added `TemplateInterface` and `TemplateTrait`
