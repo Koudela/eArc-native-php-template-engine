@@ -24,7 +24,10 @@ and easy to understand.
     - [Attributes](#attributes)
     - [Select](#select)
 - [Releases](#releases)
-    - [Release 0.0](#release-00)
+  - [Release 0.3](#release-03)
+  - [Release 0.2](#release-02)
+  - [Release 0.1](#release-01)
+  - [Release 0.0](#release-00)
   
 ## Install
 
@@ -317,6 +320,10 @@ Even arguments can be passed to the templates constructors.
 #### Select
 
 ## Releases
+
+### Release 0.3
+
+- support for PHP ^8.0
 
 ### Release 0.2
 
