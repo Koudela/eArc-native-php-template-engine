@@ -9,32 +9,31 @@
  * @license http://opensource.org/licenses/MIT MIT License
  */
 
-namespace eArc\NativePHPTemplateEngine;
+namespace eArc\NativePHPTemplateEngine\html;
 
+use eArc\NativePHPTemplateEngine\AbstractTemplateModel;
 use Generator;
 use IteratorAggregate;
 
-class IteratorTemplateModel extends AbstractTemplateModel implements IteratorAggregate
+class AttributeValues extends AbstractTemplateModel implements IteratorAggregate
 {
-    /** @var iterable<string|TemplateInterface> */
-    public iterable $iterable = [];
+    /** @var array<string> */
+    public array $values;
 
-    public function __construct(iterable $iterable)
+    public function __construct(array $values)
     {
-        $this->iterable = $iterable;
+        $this->values = $values;
     }
 
     protected function template(): void
     {
-        foreach ($this->iterable as $template) {
-            echo $template;
-        }
+        echo implode(' ', $this->values);
     }
 
     public function getIterator(): Generator
     {
-        foreach ($this->iterable as $key => $template) {
-            yield $key => $template;
+        foreach ($this->values as $key => $value) {
+            yield $key => $value;
         }
     }
 }

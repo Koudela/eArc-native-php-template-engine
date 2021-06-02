@@ -9,18 +9,16 @@
  * @license http://opensource.org/licenses/MIT MIT License
  */
 
-namespace eArc\NativePHPTemplateEngine\helpers;
-
-use eArc\NativePHPTemplateEngine\AbstractTemplateModel;
+namespace eArc\NativePHPTemplateEngine;
 
 interface TemplateModelInterface
 {
     /**
-     * @param string|null $fQCN The fully qualified class name of the template or
-     * null to let the method guess the template.
+     * @param class-string|null $fQCN The fully qualified class name of the template
+     * or null to let the method guess the template.
 
-     * @return AbstractTemplateModel An instance of the data template model from
+     * @return TemplateInterface An instance of the data template model from
      * the implementing object.
      */
-    public function getTemplate(?string $fQCN = null);
+    public function getTemplate(string $fQCN = null): TemplateInterface;
 }

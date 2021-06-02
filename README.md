@@ -4,50 +4,50 @@ Lightweight dependency free template component of the
 [earc framework](https://github.com/Koudela/eArc-core) for an 
 [SOLID](https://en.wikipedia.org/wiki/SOLID) rendering approach.
 
-Use the power of object oriented programming to make your templates reusable
+Use the power of object-oriented programming to make your templates reusable
 and easy to understand.
 
-## Table of Contents
+## table of Contents
 
 - [Install](#install)
-- [Bootstrap](#bootstrap)
-- [Configure](#configure)
-- [Basic usage](#basic-usage)
-  - [The template](#the-template)
-  - [Property logic](#property-logic)
-  - [Rendering](#rendering)
-  - [Rendering JSON objects](#rendering-json-objects)
-- [Helpers](#helpers)  
-  - [The template model interface](#the-template-model-interface)
-  - [The collection template model](#the-collection-template-model)
-  - [Html](#html)
-    - [Attributes](#attributes)
-    - [Select](#select)
-- [Releases](#releases)
-  - [Release 0.3](#release-03)
-  - [Release 0.2](#release-02)
-  - [Release 0.1](#release-01)
-  - [Release 0.0](#release-00)
+- [bootstrap](#bootstrap)
+- [configure](#configure)
+- [basic usage](#basic-usage)
+  - [the template](#the-template)
+  - [property logic](#property-logic)
+  - [rendering](#rendering)
+  - [rendering JSON objects](#rendering-json-objects)
+- [helpers](#helpers)  
+  - [the template model interface](#the-template-model-interface)
+  - [the collection template model](#the-collection-template-model)
+  - [html](#html)
+    - [attributes](#attributes)
+    - [select](#select)
+- [releases](#releases)
+  - [release 0.3](#release-03)
+  - [release 0.2](#release-02)
+  - [release 0.1](#release-01)
+  - [release 0.0](#release-00)
   
-## Install
+## install
 
 ```shell script
 $ composer require earc/native-php-template-engine
 ```
 
-## Bootstrap
+## bootstrap
 
 The earc/native-php-template-engine does not require any bootstrapping.
 
-## Configure
+## configure
 
 The earc/native-php-template-engine does not require any configuration.
 
-## Basic usage
+## basic usage
 
 You can render `HTML`, `XML` and any other structured or unstructured output.
 
-### The template
+### the template
 
 Templates are simple objects extending the `AbstractTemplateModel`. All the power
 of the object oriented programming can be used - even dependency injection.
@@ -89,7 +89,7 @@ to a string. All logic has to be outsourced in services, entities, models,
 transformer, etc. Even `ifs` and `loops` should not be visible inside the `template`
 method although they can be recognized via the underlying property.
 
-### Property logic
+### property logic
 
 Even if all logic is stripped from the `template` method, three basic `operations`
 have to remain inside the template model: `if`, `include` and `loop`. They are
@@ -161,7 +161,7 @@ templates.
 The property logic helps you to follow the single responsibility principle in 
 your templates. Keeping your code clean, and your templates easy to understand.
 
-### Rendering
+### rendering
 
 To render the template simply cast the template model/object to string.
 
@@ -177,7 +177,7 @@ You can echo the class directly. PHP does the cast implicitly.
 echo new MyTemplate($object, $value);
 ```
 
-### Rendering JSON objects
+### rendering JSON objects
 
 Sometimes you do not need the html but the data. `json_encode` transforms the
 public properties. This can be used to combine two purposes in one output data
@@ -195,7 +195,7 @@ $template = new MyTemplate($object, $value);
 echo json_encode(['data' => $template, 'html' => (string) $template]);
 ```
 
-## Helpers
+## helpers
 
 To make the basic usage work the earc/native-php-template-engine uses 41 lines 
 of code only. 
@@ -203,7 +203,7 @@ of code only.
 There may be times when you need some extra assistance for faster coding. The
 earc/native-php-template-engine is shipped with a growing number of helpers.
 
-### The template model interface
+### the template model interface
 
 Writing templates is about enhancing data output. Complex data types are most of
 the time objects - known as entities if they are persistable. Wouldn't it be nice
@@ -260,7 +260,7 @@ class SomeEntity implements TemplateModelInterface
 }
 ```
 
-### The collection template model
+### the collection template model
 
 The `IteratorTemplateModel` works fine as long as the casting of the items yields
 the desired result. Preprocessing would be a possibility, but it is a stupid enough
@@ -315,23 +315,32 @@ Even arguments can be passed to the templates constructors.
     
 ```
 
-### Html 
-#### Attributes
-#### Select
+### html 
+#### attributes
+#### select
 
-## Releases
+## releases
 
-### Release 0.3
+### release 1.0
+
+- PHP ^8.0 only
+- simplification of api
+- access level public for rendered properties
+- constructor of `IteratorTemplateModel` accepts `iterable<string|TemplateInterface>`
+- general html element template
+
+### release 0.3
 
 - support for PHP ^8.0
 
-### Release 0.2
+### release 0.2
 
 - added `callable` type to arguments for `OptionTemplateModel` and `OptGroupTemplateModel`
 
-### Release 0.1
+### release 0.1
 
 - added `TemplateInterface` and `TemplateTrait`
 
-### Release 0.0
+### release 0.0
+
 - initial release
